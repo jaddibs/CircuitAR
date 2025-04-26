@@ -1,0 +1,41 @@
+- !<AssetImportMetadata/ab89e662-4d39-42e4-994e-85312e7545db>
+  ImportedAssetIds:
+    JavaScriptAsset: !<reference> c08a6a5e-a2b5-430e-9e52-b93d6102662a
+  ImporterName: JavaScriptAssetImporter
+  PrimaryAsset: !<reference> c08a6a5e-a2b5-430e-9e52-b93d6102662a
+  PackageType: NotAPackage
+  PackagePolicy: CannotBeUnpacked
+  ExtraData:
+    {}
+  AssetDataMap:
+    JavaScriptAsset: !<own> 300cf3f9-e269-4afe-8b3d-de7c5411be08
+  DependentFiles:
+    []
+  ImporterSettings: !<AssetImporterSettings>
+    {}
+  CompressionSettings: !<own> 00000000-0000-0000-0000-000000000000
+- !<ScriptAssetData/300cf3f9-e269-4afe-8b3d-de7c5411be08>
+  SvgIcon: ""
+  Description: ""
+  InternalVersion: 0
+  VersionMajor: 0
+  VersionMinor: 0
+  VersionPatch: 0
+  ComponentUid: 28d9428c-0e68-425f-8c3a-807e42e2d761
+  ExportUid: 00000000-0000-0000-0000-000000000000
+  CurrentVisibility: Editable
+  MaxVisibility: Editable
+  ScriptInputsHidden:
+    enableDebugPrints: false
+  ScriptTypesHidden:
+    {}
+  DeclarationFile: !<reference> 00000000-0000-0000-0000-000000000000
+  DefaultScriptInputs:
+    - snapToClosest: true
+      cameraInput: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      enableDebugPrints: false
+      dragStartTriggerName: DRAG_START_TRIGGER
+      dragEndTriggerName: DRAG_END_TRIGGER
+  ScriptTypes:
+    -
+      {}
