@@ -1,27 +1,27 @@
-- !<AssetImportMetadata/ab89e662-4d39-42e4-994e-85312e7545db>
+- !<AssetImportMetadata/b9e26647-beb6-4127-9175-3ca6bf4fb94d>
   ImportedAssetIds:
-    JavaScriptAsset: !<reference> c08a6a5e-a2b5-430e-9e52-b93d6102662a
-  ImporterName: JavaScriptAssetImporter
-  PrimaryAsset: !<reference> c08a6a5e-a2b5-430e-9e52-b93d6102662a
+    TypeScriptAsset: !<reference> a778f6de-d0ef-4116-8b22-9b1828154a70
+  ImporterName: TypeScriptAssetImporter
+  PrimaryAsset: !<reference> a778f6de-d0ef-4116-8b22-9b1828154a70
   PackageType: NotAPackage
   PackagePolicy: CannotBeUnpacked
   ExtraData:
     {}
   AssetDataMap:
-    JavaScriptAsset: !<own> 300cf3f9-e269-4afe-8b3d-de7c5411be08
+    TypeScriptAsset: !<own> f797abf5-acb4-4bf5-a094-2b9c374dc62d
   DependentFiles:
     []
   ImporterSettings: !<AssetImporterSettings>
     {}
   CompressionSettings: !<own> 00000000-0000-0000-0000-000000000000
-- !<ScriptAssetData/300cf3f9-e269-4afe-8b3d-de7c5411be08>
+- !<TypeScriptAssetData/f797abf5-acb4-4bf5-a094-2b9c374dc62d>
   SvgIcon: ""
   Description: ""
   InternalVersion: 0
   VersionMajor: 0
   VersionMinor: 0
   VersionPatch: 0
-  ComponentUid: 28d9428c-0e68-425f-8c3a-807e42e2d761
+  ComponentUid: aa813323-b657-4a43-a800-b8bb64b7abe9
   ExportUid: 00000000-0000-0000-0000-000000000000
   CurrentVisibility: Editable
   MaxVisibility: Editable
@@ -31,11 +31,9 @@
     {}
   DeclarationFile: !<reference> 00000000-0000-0000-0000-000000000000
   DefaultScriptInputs:
-    - snapToClosest: true
-      cameraInput: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
-      enableDebugPrints: false
-      dragStartTriggerName: DRAG_START_TRIGGER
-      dragEndTriggerName: DRAG_END_TRIGGER
+    - enableDebugPrints: false
   ScriptTypes:
     -
       {}
+  InputLines:
+    - // @input bool enableDebugPrints
