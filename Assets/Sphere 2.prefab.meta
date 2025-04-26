@@ -1,0 +1,63 @@
+- !<AssetImportMetadata/f6c2772e-154b-4d0d-997d-3c2d4dc77fe2>
+  ImportedAssetIds:
+    ObjectPrefab: !<reference> a19daf62-8ba2-40e3-bb97-a85665a837c8
+  ImporterName: ObjectPrefabImporter
+  PrimaryAsset: !<reference> a19daf62-8ba2-40e3-bb97-a85665a837c8
+  PackageType: NotAPackage
+  PackagePolicy: CannotBeUnpacked
+  ExtraData:
+    {}
+  AssetDataMap:
+    ObjectPrefab: !<own> f0567379-f1bb-47e8-a60f-5589707868f5
+  DependentFiles:
+    []
+  ImporterSettings: !<AssetImporterSettings>
+    {}
+  CompressionSettings: !<own> 00000000-0000-0000-0000-000000000000
+- !<SceneObject/5140898d-3069-4c5a-b1e3-b41e3c01b8d7>
+  PrefabRemaps:
+    []
+  Name: Sphere 2
+  Enabled: true
+  Layers: 1
+  LocalTransform:
+    position: {x: 15.000000, y: -6.000000, z: -70.000000}
+    rotation: {x: 0.000000, y: -0.000000, z: 0.000000}
+    scale: {x: 6.000000, y: 6.000000, z: 6.000000}
+    hasSegmentScaleCompensation: false
+  Children:
+    []
+  Components:
+    - !<own> a5c8bd40-b7a6-4bf4-a49e-f9479f3c235e
+- !<ObjectPrefab/65cb72a0-7dfb-4392-a6bd-dac75673d9e2>
+  PackagePath: ""
+  objects:
+    - !<own> 5140898d-3069-4c5a-b1e3-b41e3c01b8d7
+  LazyLoading: false
+  RetainAssets: true
+- !<RenderMeshVisual/a5c8bd40-b7a6-4bf4-a49e-f9479f3c235e>
+  PrefabRemaps:
+    []
+  Name: Render Mesh Visual
+  Enabled: true
+  RenderOrder: 0
+  StretchMode: Stretch
+  VerticalAlignment: Center
+  HorizontalAlignment: Center
+  MeshShadowMode: None
+  ShadowColor: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
+  ShadowDensity: 1.000000
+  Materials:
+    - !<reference> 2ae369e3-df84-4a4d-b3a8-1167eec0fd10
+  Mesh: !<reference> 5b9f93be-fdf4-4252-9c2b-516e1bff17a3
+  Skin: !<reference> 00000000-0000-0000-0000-000000000000
+  BlendShapesEnabled: true
+  BlendNormals: false
+  BlendShapes:
+    {}
+- !<ObjectPrefabAssetData/f0567379-f1bb-47e8-a60f-5589707868f5>
+  SourceRemaps:
+    - 440ea536-7ff1-40e5-a7bb-0e82b5aed660: a5c8bd40-b7a6-4bf4-a49e-f9479f3c235e
+    - a19daf62-8ba2-40e3-bb97-a85665a837c8: 65cb72a0-7dfb-4392-a6bd-dac75673d9e2
+    - d699f0eb-2aa2-471e-b522-d9340477d964: 5140898d-3069-4c5a-b1e3-b41e3c01b8d7
+  SourceState: !<own> 65cb72a0-7dfb-4392-a6bd-dac75673d9e2

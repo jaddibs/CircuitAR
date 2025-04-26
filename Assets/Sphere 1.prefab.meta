@@ -1,0 +1,63 @@
+- !<AssetImportMetadata/2db0ca60-219c-44e1-9798-de1f5aa40e33>
+  ImportedAssetIds:
+    ObjectPrefab: !<reference> 7a2ee4fb-ae4d-4444-ad2f-943787fe289e
+  ImporterName: ObjectPrefabImporter
+  PrimaryAsset: !<reference> 7a2ee4fb-ae4d-4444-ad2f-943787fe289e
+  PackageType: NotAPackage
+  PackagePolicy: CannotBeUnpacked
+  ExtraData:
+    {}
+  AssetDataMap:
+    ObjectPrefab: !<own> 2f8c7410-fd5e-44c0-a44a-80748af82159
+  DependentFiles:
+    []
+  ImporterSettings: !<AssetImporterSettings>
+    {}
+  CompressionSettings: !<own> 00000000-0000-0000-0000-000000000000
+- !<ObjectPrefabAssetData/2f8c7410-fd5e-44c0-a44a-80748af82159>
+  SourceRemaps:
+    - 7a2ee4fb-ae4d-4444-ad2f-943787fe289e: cc763352-5a2e-4a0c-87aa-27042abe84ef
+    - 9b6bc434-caa5-460c-b8df-26acfd177fc1: 82d274e2-673a-4236-b7ef-d01723ab13fa
+    - db353235-36b6-4d1d-a167-bdeebc51978f: 41f5c9e1-cd78-4818-9bac-6b4a12a2308f
+  SourceState: !<own> cc763352-5a2e-4a0c-87aa-27042abe84ef
+- !<SceneObject/41f5c9e1-cd78-4818-9bac-6b4a12a2308f>
+  PrefabRemaps:
+    []
+  Name: Sphere 1
+  Enabled: true
+  Layers: 1
+  LocalTransform:
+    position: {x: 35.000000, y: -6.000000, z: -70.000000}
+    rotation: {x: 0.000000, y: -0.000000, z: 0.000000}
+    scale: {x: 6.000000, y: 6.000000, z: 6.000000}
+    hasSegmentScaleCompensation: false
+  Children:
+    []
+  Components:
+    - !<own> 82d274e2-673a-4236-b7ef-d01723ab13fa
+- !<RenderMeshVisual/82d274e2-673a-4236-b7ef-d01723ab13fa>
+  PrefabRemaps:
+    []
+  Name: Render Mesh Visual
+  Enabled: true
+  RenderOrder: 0
+  StretchMode: Stretch
+  VerticalAlignment: Center
+  HorizontalAlignment: Center
+  MeshShadowMode: None
+  ShadowColor: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
+  ShadowDensity: 1.000000
+  Materials:
+    - !<reference> 2ae369e3-df84-4a4d-b3a8-1167eec0fd10
+  Mesh: !<reference> 5b9f93be-fdf4-4252-9c2b-516e1bff17a3
+  Skin: !<reference> 00000000-0000-0000-0000-000000000000
+  BlendShapesEnabled: true
+  BlendNormals: false
+  BlendShapes:
+    {}
+- !<ObjectPrefab/cc763352-5a2e-4a0c-87aa-27042abe84ef>
+  PackagePath: ""
+  objects:
+    - !<own> 41f5c9e1-cd78-4818-9bac-6b4a12a2308f
+  LazyLoading: false
+  RetainAssets: true
