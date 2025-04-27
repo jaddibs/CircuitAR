@@ -45,7 +45,7 @@ export class LightToggler extends BaseScriptComponent {
         
         // Get the name of the current object to use as component name
         this.componentName = this.getSceneObject().name;
-        print("LightToggler: Using object name as component name: " + this.componentName);
+        // print("LightToggler: Using object name as component name: " + this.componentName); // Use actual logging
         
         // Validate light objects
         this.validateLightObjects();
@@ -60,16 +60,24 @@ export class LightToggler extends BaseScriptComponent {
         this.startUpdateInterval();
     }
     
+    onStart(): void {
+        if (CircuitGraphManager.instance) {
+            CircuitGraphManager.instance.registerLightToggler(this.componentName, this);
+            // print(`LightToggler ${this.componentName}: Registered with Manager.`); // Add actual logging
+        } else {
+             // print(`WARN: CircuitGraphManager instance not found during Start for ${this.componentName}`); // Add actual logging
+        }
+    }
+    
     /**
      * Validate that we have proper light objects attached
      */
     private validateLightObjects(): void {
-        this.hasValidLightObjects = this.lightObject != null && this.lightOffObject != null;
-        
+        this.hasValidLightObjects = !!this.lightObject && !!this.lightOffObject;
         if (!this.hasValidLightObjects) {
-            print("LightToggler WARNING: Light objects not properly attached to " + this.componentName);
+             // print("LightToggler WARNING: Light objects not properly attached to " + this.componentName); // Use actual logging
         } else {
-            print("LightToggler: Light objects validated for " + this.componentName);
+            // print("LightToggler: Light objects validated for " + this.componentName);
         }
     }
 
@@ -84,7 +92,7 @@ export class LightToggler extends BaseScriptComponent {
         this.lightObject.enabled = false;
         this.lightOffObject.enabled = true;
         
-        print("LightToggler: Set initial state to OFF for " + this.componentName);
+        // print("LightToggler: Set initial state to OFF for " + this.componentName); // Use actual logging
     }
 
     /**
@@ -128,14 +136,14 @@ export class LightToggler extends BaseScriptComponent {
         const manager = CircuitGraphManager.instance;
         
         if (!manager) {
-            print("LightToggler: Warning - CircuitGraphManager instance not found");
+            // print("LightToggler: Warning - CircuitGraphManager instance not found");
             return;
         }
         
         // Check if the powered map exists
         if (!manager.powered) {
             // Powered map not initialized yet, keep light in initial state
-            print("LightToggler: Warning - CircuitGraphManager.powered map not initialized yet");
+            // print("LightToggler: Warning - CircuitGraphManager.powered map not initialized yet");
             return;
         }
         
@@ -148,11 +156,11 @@ export class LightToggler extends BaseScriptComponent {
             if (isPowered) {
                 this.lightObject.enabled = true;
                 this.lightOffObject.enabled = false;
-                print("LightToggler: Power ON for " + this.componentName);
+                // print(`LightToggler ${this.componentName}: Set ON`); // Use actual logging
             } else {
                 this.lightObject.enabled = false;
                 this.lightOffObject.enabled = true;
-                print("LightToggler: Power OFF for " + this.componentName);
+                // print(`LightToggler ${this.componentName}: Set OFF`); // Use actual logging
             }
             
             // Update previous state
