@@ -1,0 +1,45 @@
+- !<AssetImportMetadata/b9e191d2-f59e-437f-b5b8-e2b9ab967e7d>
+  ImportedAssetIds:
+    TypeScriptAsset: !<reference> 09a3a3e5-bf99-499e-8f87-13e2cd746e96
+  ImporterName: TypeScriptAssetImporter
+  PrimaryAsset: !<reference> 09a3a3e5-bf99-499e-8f87-13e2cd746e96
+  PackageType: NotAPackage
+  PackagePolicy: CannotBeUnpacked
+  ExtraData:
+    {}
+  AssetDataMap:
+    TypeScriptAsset: !<own> 0ba14669-49d8-4a79-9a07-717fc1b6b528
+  DependentFiles:
+    []
+  ImporterSettings: !<AssetImporterSettings>
+    {}
+  CompressionSettings: !<own> 00000000-0000-0000-0000-000000000000
+- !<TypeScriptAssetData/0ba14669-49d8-4a79-9a07-717fc1b6b528>
+  SvgIcon: ""
+  Description: ""
+  InternalVersion: 0
+  VersionMajor: 0
+  VersionMinor: 0
+  VersionPatch: 0
+  ComponentUid: 6f7d5b13-40be-4ee3-95ee-a90d68a83aed
+  ExportUid: 00000000-0000-0000-0000-000000000000
+  CurrentVisibility: Editable
+  MaxVisibility: Editable
+  ScriptInputsHidden:
+    lightObject: false
+    lightOffObject: false
+    updateInterval: false
+  ScriptTypesHidden:
+    {}
+  DeclarationFile: !<reference> 00000000-0000-0000-0000-000000000000
+  DefaultScriptInputs:
+    - lightObject: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      lightOffObject: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      updateInterval: 0.100000
+  ScriptTypes:
+    -
+      {}
+  InputLines:
+    - // @input SceneObject lightObject
+    - // @input SceneObject lightOffObject
+    - // @input float updateInterval = 0.1

@@ -1946,6 +1946,24 @@
   Components:
     - !<own> 27cc4350-f53f-4f4b-8321-544abd48bbd4
     - !<own> 7950e8c2-1f6e-49fe-8f4c-c1df9a31b383
+- !<ScriptComponent/1adcb4d2-445f-41d7-9d98-5d5146f6038b>
+  PrefabRemaps:
+    []
+  Name: LightToggler
+  Enabled: true
+  ScriptAsset: !<reference> 09a3a3e5-bf99-499e-8f87-13e2cd746e96
+  ScriptInputsDefault:
+    updateInterval: true
+  ScriptTypesDefault:
+    {}
+  ScriptInputs:
+    "":
+      lightObject: !<reference.SceneObject> 4db82359-3a82-46e7-a9ac-84bf53cf36c7
+      lightOffObject: !<reference.SceneObject> e2067ece-0da0-493c-a80e-042ec7634486
+      updateInterval: 0.100000
+  ScriptTypes:
+    "":
+      {}
 - !<SceneObject/1b3afe36-5cd7-451e-b440-c16376542df4>
   PrefabRemaps:
     []
@@ -2092,21 +2110,31 @@
     - !<own> 37285c31-a8ec-4f6c-ba24-c7f9993be1b5
 - !<SceneObject/1d6b00e5-579e-4025-9856-a6cd599988ec>
   PrefabRemaps:
-    - 0fa17b42-c0a7-41c5-a0f8-916226f71718: 3703758c-4a16-4a12-8a0c-1d72016a5ec7
-    - 13e4b406-72fd-45d1-9f09-a3d3a081f93d: e38a448a-fb7a-4534-aa0a-212d46a44b87
-    - 1d6b00e5-579e-4025-9856-a6cd599988ec: c98f2858-44af-419e-8e88-462c9573af12
-    - 284d4ec3-ae82-489b-96a4-0ee9da8294ca: 4bb4d348-f793-4966-9b92-bdb618e59ba0
-    - 4b406f63-23b2-4012-963a-3fad81aacdc2: 19720172-0af9-4d7f-b498-8089b0aa8d4c
-    - 5a90f8ff-643c-4490-b33e-5701606446cd: 21fa21b0-9e43-46b3-b07e-de02b8a934c6
-    - 6512564b-21d1-4506-807e-149b0801dee1: e90e507f-f794-4244-882e-947b3b3e647d
-    - 7fd2e8d7-e598-4321-a5cf-a112216c1949: 0761cb3a-caf2-43e1-9e35-0f71963a1b36
-    - 85649b24-da35-4565-bea3-af6b096350ca: 93f24930-47d8-44f3-88ce-c3dbddf82f78
-    - 882da613-2dc9-4524-b75d-7cbea4011350: fb1100ee-2f1b-4fa9-a5ba-e5aa0a98c245
-    - b30a06e6-02c1-4c3e-a853-159411cffed7: 84763be9-5fe4-4d53-addd-ae0ddc6a5941
-    - db5d9c19-2f0c-431a-a800-350fa90e1b67: 4dae7ab9-e7e0-401a-82c0-079ddf3f4b15
-    - dd2d43c3-6ab1-42c9-b0c1-6c7d05b1c032: 2a125d6d-2b87-4eed-a330-c7aca5d8ffea
-    - dedb7885-e64f-45b9-9c32-a40ae89a8c6e: 49df60ad-2e36-4d91-98e2-459a2bfd2e43
-    - e897d732-c236-412c-8444-625b052f354e: 6a8e3f72-d633-451b-89e8-c0072787f9b9
+    - 0cb5e5cd-eb91-4597-9444-c8fcca8cd4f4: b288d54d-814c-4914-97c8-6a1331877f2f
+    - 0fa17b42-c0a7-41c5-a0f8-916226f71718: 2a8001dd-f434-499a-8d34-3c9a58c51b64
+    - 13e4b406-72fd-45d1-9f09-a3d3a081f93d: 5187c32c-6e6b-45db-aef0-701d4b05c378
+    - 1adcb4d2-445f-41d7-9d98-5d5146f6038b: 2e8660d2-2944-4bde-8a43-390801de459f
+    - 1c5b2dcf-ea52-4c1d-bf64-3e54d0234240: fb51ee44-a3e5-44a2-adfe-b8c6a6120a92
+    - 1d6b00e5-579e-4025-9856-a6cd599988ec: bddd08bd-47ef-4396-901b-b68b341ec359
+    - 284d4ec3-ae82-489b-96a4-0ee9da8294ca: c2b49870-48fc-40bb-84fe-232db6a01b7a
+    - 37576cba-483e-4d8c-afe0-816d5c43ecaf: daa17783-1545-4ae2-aca1-0424ab621014
+    - 4b406f63-23b2-4012-963a-3fad81aacdc2: abb280b5-c8c2-4afb-bec2-9c5792e6076f
+    - 4db82359-3a82-46e7-a9ac-84bf53cf36c7: 94a6c7d1-2c6f-41a7-9bbe-7dbf9c43e177
+    - 59daedaf-8803-413e-9d8c-4721789dc2dc: 8231017f-b5d1-4801-a820-72369b596e80
+    - 5a90f8ff-643c-4490-b33e-5701606446cd: f83558a3-49a1-47fc-8968-5c81d43d753a
+    - 6512564b-21d1-4506-807e-149b0801dee1: 23e67621-b468-4e7d-9f96-ba63e7b35ae5
+    - 762a5eac-ff90-4736-a567-371dcf928389: 08213234-4053-4c09-82fe-7e2fe3e66de3
+    - 7fd2e8d7-e598-4321-a5cf-a112216c1949: 128ad10d-499d-4803-bbd2-51fc4d8fa572
+    - 85649b24-da35-4565-bea3-af6b096350ca: e18e5025-13de-4efc-a853-7ef23bc81ddb
+    - 882da613-2dc9-4524-b75d-7cbea4011350: 93628942-11d6-4070-b122-21c25094600e
+    - a3f688d6-6495-46a6-9fb2-9c605433c9e7: 9f24ab21-6690-4e3a-9451-6a42912e17e5
+    - a4021100-a750-465c-8e83-34f53838e998: 00268590-f1a2-43e6-9e67-f18b9181fd1f
+    - b30a06e6-02c1-4c3e-a853-159411cffed7: a543c1c0-1f66-453c-acd6-48a1ee40d674
+    - db5d9c19-2f0c-431a-a800-350fa90e1b67: 4f39bd0e-ef6a-4618-8fe3-c63bafb586d3
+    - dd2d43c3-6ab1-42c9-b0c1-6c7d05b1c032: 4f67009c-3698-43b1-97dd-6388a9f59f88
+    - dedb7885-e64f-45b9-9c32-a40ae89a8c6e: 60f30ed4-ea9c-41a0-bc21-489d3f65c528
+    - e2067ece-0da0-493c-a80e-042ec7634486: 44491bf6-fd26-447e-8c03-b2e71bb47f66
+    - e897d732-c236-412c-8444-625b052f354e: e5389722-3289-4f11-a825-3ebe9a46b0d9
   Name: 2
   Enabled: true
   Layers: 1
@@ -2120,8 +2148,9 @@
     - !<own> 6512564b-21d1-4506-807e-149b0801dee1
     - !<own> dedb7885-e64f-45b9-9c32-a40ae89a8c6e
     - !<own> 4db82359-3a82-46e7-a9ac-84bf53cf36c7
+    - !<own> e2067ece-0da0-493c-a80e-042ec7634486
   Components:
-    []
+    - !<own> 1adcb4d2-445f-41d7-9d98-5d5146f6038b
 - !<SceneObject/1d6b98ad-0211-4139-ad0b-d174ba38e855>
   PrefabRemaps:
     []
@@ -12117,7 +12146,7 @@
   PrefabRemaps:
     []
   Name: InteractableManipulation
-  Enabled: true
+  Enabled: false
   ScriptAsset: !<reference> 664b556b-1946-4c2c-866a-e675b4e86006
   ScriptInputsDefault:
     manipulateRootSceneObject: true
@@ -12184,6 +12213,26 @@
     - !<own> 98ca808e-44ab-4fd2-b9a6-a71a162d8615
   Components:
     []
+- !<RenderMeshVisual/a4021100-a750-465c-8e83-34f53838e998>
+  PrefabRemaps:
+    []
+  Name: Render Mesh Visual
+  Enabled: true
+  RenderOrder: 0
+  StretchMode: Stretch
+  VerticalAlignment: Center
+  HorizontalAlignment: Center
+  MeshShadowMode: None
+  ShadowColor: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
+  ShadowDensity: 1.000000
+  Materials:
+    - !<reference> 4ac1c09b-fdbb-4155-b35a-302c9d86dc76
+  Mesh: !<reference> e542623c-1432-4bfa-881d-a28905bd9e57
+  Skin: !<reference> 00000000-0000-0000-0000-000000000000
+  BlendShapesEnabled: true
+  BlendNormals: false
+  BlendShapes:
+    {}
 - !<SceneObject/a46dba8d-e6b1-4a1b-a7a2-e3a2baf479da>
   PrefabRemaps:
     []
@@ -15667,6 +15716,21 @@
   ScriptTypes:
     "":
       {}
+- !<SceneObject/e2067ece-0da0-493c-a80e-042ec7634486>
+  PrefabRemaps:
+    []
+  Name: LightOff
+  Enabled: true
+  Layers: 1
+  LocalTransform:
+    position: {x: 1.666700, y: 0.700000, z: 0.000000}
+    rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    hasSegmentScaleCompensation: false
+  Children:
+    []
+  Components:
+    - !<own> a4021100-a750-465c-8e83-34f53838e998
 - !<SceneObject/e272be65-6595-4c91-86b7-03a7416d87a0>
   PrefabRemaps:
     []
