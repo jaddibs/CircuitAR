@@ -408,13 +408,10 @@
   ScriptInputsDefault:
     tweenName: true
     playAutomatically: true
-    type: true
-    movementType: true
     start: true
     end: true
     from: true
     to: true
-    offset: true
     delay: true
     isLocal: true
   ScriptTypesDefault:

@@ -1,37 +1,39 @@
-- !<AssetImportMetadata/f694e8d4-fa32-4559-83c7-4ec977368b09>
+- !<AssetImportMetadata/2e84f6ec-bd17-499b-b3a4-9b8a5c0c34e9>
   ImportedAssetIds:
-    JavaScriptAsset: !<reference> 7e59de10-b683-4b16-b6b5-1166af26c66f
-  ImporterName: JavaScriptAssetImporter
-  PrimaryAsset: !<reference> 7e59de10-b683-4b16-b6b5-1166af26c66f
+    TypeScriptAsset: !<reference> dd6ce513-c0d7-43e7-ab0a-5aa8bd2debd5
+  ImporterName: TypeScriptAssetImporter
+  PrimaryAsset: !<reference> dd6ce513-c0d7-43e7-ab0a-5aa8bd2debd5
   PackageType: NotAPackage
   PackagePolicy: CannotBeUnpacked
   ExtraData:
     {}
   AssetDataMap:
-    JavaScriptAsset: !<own> 46a8ecc9-1e01-4c09-8a0a-1dd024ac3fe7
+    TypeScriptAsset: !<own> 467fe272-861c-45dd-865c-df776700ea70
   DependentFiles:
     []
   ImporterSettings: !<AssetImporterSettings>
     {}
   CompressionSettings: !<own> 00000000-0000-0000-0000-000000000000
-- !<ScriptAssetData/46a8ecc9-1e01-4c09-8a0a-1dd024ac3fe7>
+- !<TypeScriptAssetData/467fe272-861c-45dd-865c-df776700ea70>
   SvgIcon: ""
   Description: ""
   InternalVersion: 0
   VersionMajor: 0
   VersionMinor: 0
   VersionPatch: 0
-  ComponentUid: e617632b-b43f-47da-8e8d-875b5d2e980c
+  ComponentUid: 52e3d22d-2dec-47c9-9a16-10221af846ed
   ExportUid: 00000000-0000-0000-0000-000000000000
   CurrentVisibility: Editable
   MaxVisibility: Editable
   ScriptInputsHidden:
-    printDebugLog: false
+    audioTrack: false
   ScriptTypesHidden:
     {}
   DeclarationFile: !<reference> 00000000-0000-0000-0000-000000000000
   DefaultScriptInputs:
-    - printDebugLog: false
+    - audioTrack: !<reference.AudioTrackAsset> 00000000-0000-0000-0000-000000000000
   ScriptTypes:
     -
       {}
+  InputLines:
+    - // @input Asset.AudioTrackAsset audioTrack
