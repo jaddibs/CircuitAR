@@ -27,13 +27,19 @@
   MaxVisibility: Editable
   ScriptInputsHidden:
     enableDebugPrints: false
+    excludeCameraMovement: false
+    rootSceneObjectPath: false
   ScriptTypesHidden:
     {}
   DeclarationFile: !<reference> 00000000-0000-0000-0000-000000000000
   DefaultScriptInputs:
     - enableDebugPrints: false
+      rootSceneObjectPath: ""
+      excludeCameraMovement: true
   ScriptTypes:
     -
       {}
   InputLines:
     - // @input bool enableDebugPrints
+    - // @input string rootSceneObjectPath
+    - // @input bool excludeCameraMovement = true
