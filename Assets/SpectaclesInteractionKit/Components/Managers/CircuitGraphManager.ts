@@ -68,6 +68,11 @@ export class CircuitGraphManager extends BaseScriptComponent {
             return;
         }
         CircuitGraphManager.instance = this;
+        
+        // Initialize maps
+        this.switchStatus = {};
+        this.componentInstances = new Map();
+        this.powered = {};
     }
 
     /**
@@ -307,10 +312,12 @@ export class CircuitGraphManager extends BaseScriptComponent {
                 }
 
                 // Check for Switch
-                if (componentInstance.type === "Switch") {
+                if (componentInstance && componentInstance.type === "Switch") {
                     // print("CircuitGraphManager: Switch found!"); // Commented out due to linter error
                     const sceneObject = componentInstance.getSceneObject();
-                    cycleBrokenBySwitch = !this.switchStatus[sceneObject.name];
+                    if (sceneObject && sceneObject.name) {
+                        cycleBrokenBySwitch = !this.switchStatus[sceneObject.name];
+                    }
                 }
             } // End of first pass through cycle components
 

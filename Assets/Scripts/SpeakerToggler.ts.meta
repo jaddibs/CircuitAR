@@ -27,13 +27,19 @@
   MaxVisibility: Editable
   ScriptInputsHidden:
     audioTrack: false
+    debugMode: false
+    playOnStart: false
   ScriptTypesHidden:
     {}
   DeclarationFile: !<reference> 00000000-0000-0000-0000-000000000000
   DefaultScriptInputs:
     - audioTrack: !<reference.AudioTrackAsset> 00000000-0000-0000-0000-000000000000
+      debugMode: false
+      playOnStart: false
   ScriptTypes:
     -
       {}
   InputLines:
     - // @input Asset.AudioTrackAsset audioTrack
+    - '// @input bool debugMode = true {"hint":"Debug info about power status will be printed to console"}'
+    - '// @input bool playOnStart {"hint":"If true, the speaker will play on start (for testing)"}'
