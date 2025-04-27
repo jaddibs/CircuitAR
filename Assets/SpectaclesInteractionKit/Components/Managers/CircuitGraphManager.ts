@@ -46,23 +46,17 @@ export class CircuitGraphManager extends BaseScriptComponent {
 
     // --- Initialization ---
     onAwake(): void {
-        print("CircuitGraphManager: Awake");
+        // print("CircuitGraphManager: Awake"); // Removed log
         // Set the static instance (Singleton Pattern)
         if (CircuitGraphManager.instance && CircuitGraphManager.instance !== this) {
+            // Keep this important warning
             print("CircuitGraphManager: WARNING - Multiple instances detected! Destroying this one.");
             // Optionally destroy this duplicate instance if the engine allows
-            // this.getSceneObject().destroy(); 
-            return; 
+            // this.getSceneObject().destroy();
+            return;
         }
-        // Add log before setting the instance
-        try {
-             print("CircuitGraphManager: OnAwake - Initial components state: " + JSON.stringify(this.components));
-        } catch (e) {
-             print("CircuitGraphManager: OnAwake - Error logging components state: " + e);
-        }
+        // Removed initial state logging
         CircuitGraphManager.instance = this;
-
-        // Optionally, load initial state if needed
     }
 
     // --- Public Methods ---
@@ -77,23 +71,16 @@ export class CircuitGraphManager extends BaseScriptComponent {
      * @param componentB Name of the second component.
      */
     public addConnection(componentA: string, componentB: string): void {
-        // --- Defensive Check & Logging ---
+        // --- Defensive Check ---
         if (!this.components) {
-            print("CircuitGraphManager: WARNING - this.components was undefined/null in addConnection! Re-initializing.");
             this.components = [];
         }
-        if (!this.connections) { // Also check connections array
-            print("CircuitGraphManager: WARNING - this.connections was undefined/null in addConnection! Re-initializing.");
+        if (!this.connections) {
             this.connections = [];
         }
-        try {
-             print(`CircuitGraphManager: addConnection START - Components: ${JSON.stringify(this.components)} | Connections: ${JSON.stringify(this.connections)}`);
-        } catch (e) {
-             print("CircuitGraphManager: addConnection - Error logging state: " + e);
-        }
-        // --- End Check ---
+        // Removed state logging
 
-        print(`CircuitGraphManager: Attempting to add connection between [${componentA}] and [${componentB}]`);
+        // Removed attempt logging
 
         // 1. Add components to the list if they don't exist
         this.addComponent(componentA);
@@ -108,18 +95,18 @@ export class CircuitGraphManager extends BaseScriptComponent {
         if (!connectionExists) {
             const newConnection: [string, string] = [componentA, componentB];
             this.connections.push(newConnection);
-            print(`CircuitGraphManager: Added connection: [${componentA}, ${componentB}]`);
+            // Removed added connection log
 
             // 3. Set the startConnection if it's the first one
             if (this.startConnection === null) {
                 this.startConnection = newConnection;
-                print(`CircuitGraphManager: Set start connection: [${componentA}, ${componentB}]`);
+                // Removed start connection log
             }
         } else {
-            print(`CircuitGraphManager: Connection between [${componentA}] and [${componentB}] already exists.`);
+            // Removed already exists log
         }
 
-        // Log current state (optional)
+        // Log current connections state
         this.logCurrentGraph();
     }
 
@@ -130,7 +117,8 @@ export class CircuitGraphManager extends BaseScriptComponent {
         this.components = [];
         this.connections = [];
         this.startConnection = null;
-        print("CircuitGraphManager: Graph reset.");
+        // Removed graph reset log
+        this.logCurrentGraph(); // Log empty connections after reset
     }
 
     // --- Private Helper Methods ---
@@ -139,27 +127,30 @@ export class CircuitGraphManager extends BaseScriptComponent {
     private addComponent(componentName: string): void {
         // Defensive check
         if (!this.components) {
-            print("CircuitGraphManager: WARNING - this.components was undefined/null in addComponent! Re-initializing.");
             this.components = [];
         }
+        // Removed warning log
 
         if (!this.components.includes(componentName)) {
             this.components.push(componentName);
-            print(`CircuitGraphManager: Added component: ${componentName}`);
+            // Removed added component log
         }
     }
 
-    /** Logs the current state of the components and connections. */
+    /** Logs the current state of the connections. */
     private logCurrentGraph(): void {
-        print("--- Circuit Graph State ---");
-        print("Components: " + JSON.stringify(this.components));
-        print("Connections: " + JSON.stringify(this.connections));
-        print("Start Connection: " + JSON.stringify(this.startConnection));
-        print("---------------------------");
+        // Removed header/footer/other logs
+        try {
+             // Only print the connections list
+             print("Connections: " + JSON.stringify(this.connections));
+        } catch (e) {
+            // Minimal error logging if stringify fails
+            print("CircuitGraphManager: Error logging connections state: " + e);
+        }
     }
 
     destroy(): void {
-        print("CircuitGraphManager: Destroy");
+        // print("CircuitGraphManager: Destroy"); // Removed log
         // Clear the static instance if this instance is destroyed
         if (CircuitGraphManager.instance === this) {
             CircuitGraphManager.instance = null;
