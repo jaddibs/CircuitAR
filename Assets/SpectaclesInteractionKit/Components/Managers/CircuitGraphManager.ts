@@ -2,7 +2,7 @@
 // Manages the global state of circuit connections.
 // Attach this script to a dedicated SceneObject (e.g., "GraphManager").
 
-import { validate } from "../../Utils/validate" // Assuming validate exists
+import { validate } from "../../Utils/validate"
 
 // --- Placeholder imports & Declarations ---
 // Assuming BaseScriptComponent, SceneObject, Transform, vec3, component etc. are defined elsewhere
@@ -21,72 +21,39 @@ declare function component(target: any): any;
 @component
 export class CircuitGraphManager extends BaseScriptComponent {
 
-    // --- Static Instance (Singleton Pattern) ---
-    /** The singleton instance of the CircuitGraphManager. */
+
     public static instance: CircuitGraphManager | null = null;
 
-    // --- Public Properties (Global State) ---
-
-    /** List of connected component names. */
     public components: string[] = [];
 
-    /**
-     * List of connections, where each connection is a pair of component names.
-     * Order within the pair doesn't matter (e.g., [A, B] is the same as [B, A]).
-     */
     public connections: [string, string][] = [];
 
-    /**
-     * The very first connection made, typically from the power source.
-     * Used to establish a starting point for graph traversal.
-     * Format: [componentNameA, componentNameB] or null if no connection made yet.
-     */
     public startConnection: [string, string] | null = null;
+
+    /** Map storing the power status (true/false) for each component name. */
+    public powered: { [key: string]: boolean } = {};
 
 
     // --- Initialization ---
     onAwake(): void {
-        // print("CircuitGraphManager: Awake"); // Removed log
-        // Set the static instance (Singleton Pattern)
         if (CircuitGraphManager.instance && CircuitGraphManager.instance !== this) {
-            // Keep this important warning
             print("CircuitGraphManager: WARNING - Multiple instances detected! Destroying this one.");
-            // Optionally destroy this duplicate instance if the engine allows
-            // this.getSceneObject().destroy();
             return;
         }
-        // Removed initial state logging
         CircuitGraphManager.instance = this;
     }
 
-    // --- Public Methods ---
-
-    /**
-     * Adds a connection between two circuit components.
-     * Updates the 'components' and 'connections' lists.
-     * Sets the 'startConnection' if this is the first connection added.
-     * Ensures duplicate components and connections are not added.
-     *
-     * @param componentA Name of the first component.
-     * @param componentB Name of the second component.
-     */
     public addConnection(componentA: string, componentB: string): void {
-        // --- Defensive Check ---
         if (!this.components) {
             this.components = [];
         }
         if (!this.connections) {
             this.connections = [];
         }
-        // Removed state logging
 
-        // Removed attempt logging
-
-        // 1. Add components to the list if they don't exist
         this.addComponent(componentA);
         this.addComponent(componentB);
 
-        // 2. Check if the connection already exists (order doesn't matter)
         const connectionExists = this.connections.some(conn =>
             (conn[0] === componentA && conn[1] === componentB) ||
             (conn[0] === componentB && conn[1] === componentA)
@@ -95,19 +62,15 @@ export class CircuitGraphManager extends BaseScriptComponent {
         if (!connectionExists) {
             const newConnection: [string, string] = [componentA, componentB];
             this.connections.push(newConnection);
-            // Removed added connection log
 
-            // 3. Set the startConnection if it's the first one
             if (this.startConnection === null) {
                 this.startConnection = newConnection;
-                // Removed start connection log
             }
-        } else {
-            // Removed already exists log
         }
 
-        // Log current connections state
         this.logCurrentGraph();
+        const cycles = this.findCycles();
+        this.updatePower(cycles);
     }
 
     /**
@@ -117,44 +80,146 @@ export class CircuitGraphManager extends BaseScriptComponent {
         this.components = [];
         this.connections = [];
         this.startConnection = null;
-        // Removed graph reset log
-        this.logCurrentGraph(); // Log empty connections after reset
+        this.logCurrentGraph();
+    }
+
+    /**
+     * Finds all cycles in the connection graph.
+     * @returns A list of cycles, where each cycle is represented as a list of component names.
+     */
+    public findCycles(): string[][] {
+        const cycles: string[][] = [];
+        const visited: Set<string> = new Set();
+        const recursionStack: Set<string> = new Set();
+        const parentMap: Map<string, string | null> = new Map(); // To reconstruct cycles
+
+        for (const component of this.components) {
+            if (!visited.has(component)) {
+                this.findCyclesDFS(component, visited, recursionStack, parentMap, cycles);
+            }
+        }
+        return cycles;
+    }
+
+    /**
+     * Depth First Search helper to find cycles.
+     * @param node The current node being visited.
+     * @param visited Set of all visited nodes.
+     * @param recursionStack Set of nodes currently in the recursion stack (current path).
+     * @param parentMap Map to store the parent of each node in the DFS tree.
+     * @param cycles List to accumulate found cycles.
+     */
+    private findCyclesDFS(
+        node: string,
+        visited: Set<string>,
+        recursionStack: Set<string>,
+        parentMap: Map<string, string | null>,
+        cycles: string[][]
+    ): void {
+        visited.add(node);
+        recursionStack.add(node);
+
+        const neighbors = this.getNeighbors(node);
+
+        for (const neighbor of neighbors) {
+             // Avoid going back to the immediate parent in the DFS tree
+             if (neighbor === parentMap.get(node)) {
+                continue;
+             }
+
+            if (recursionStack.has(neighbor)) {
+                // Cycle detected
+                const cycle: string[] = [];
+                let currentNode: string | null = node;
+                while (currentNode && currentNode !== neighbor) {
+                    cycle.unshift(currentNode);
+                    currentNode = parentMap.get(currentNode) ?? null;
+                }
+                if (currentNode === neighbor) {
+                     cycle.unshift(neighbor); // Add the start of the cycle
+                     // Normalize and add cycle if not already found (optional, avoids permutations)
+                     const normalizedCycle = [...cycle].sort().join(',');
+                     if (!cycles.some(c => [...c].sort().join(',') === normalizedCycle)) {
+                         cycles.push(cycle);
+                     }
+                }
+
+            } else if (!visited.has(neighbor)) {
+                 parentMap.set(neighbor, node);
+                this.findCyclesDFS(neighbor, visited, recursionStack, parentMap, cycles);
+            }
+        }
+
+        recursionStack.delete(node);
+    }
+
+    /**
+     * Gets the neighbors of a given component based on the connections.
+     * @param componentName The name of the component.
+     * @returns A list of neighboring component names.
+     */
+    private getNeighbors(componentName: string): string[] {
+        const neighbors: string[] = [];
+        for (const [compA, compB] of this.connections) {
+            if (compA === componentName) {
+                neighbors.push(compB);
+            } else if (compB === componentName) {
+                neighbors.push(compA);
+            }
+        }
+        return neighbors;
     }
 
     // --- Private Helper Methods ---
 
     /** Adds a component name to the list if it's not already present. */
     private addComponent(componentName: string): void {
-        // Defensive check
         if (!this.components) {
             this.components = [];
         }
-        // Removed warning log
 
         if (!this.components.includes(componentName)) {
             this.components.push(componentName);
-            // Removed added component log
         }
     }
 
     /** Logs the current state of the connections. */
     private logCurrentGraph(): void {
-        // Removed header/footer/other logs
         try {
-             // Only print the connections list
              print("Connections: " + JSON.stringify(this.connections));
         } catch (e) {
-            // Minimal error logging if stringify fails
             print("CircuitGraphManager: Error logging connections state: " + e);
         }
     }
 
     destroy(): void {
-        // print("CircuitGraphManager: Destroy"); // Removed log
-        // Clear the static instance if this instance is destroyed
         if (CircuitGraphManager.instance === this) {
             CircuitGraphManager.instance = null;
         }
-        // Cleanup if needed
+    }
+
+    /**
+     * Updates the power status of components based on detected cycles.
+     * A component is considered powered if it's part of any cycle.
+     * @param cycles The list of cycles found in the graph (output of findCycles).
+     */
+    public updatePower(cycles: string[][]): void {
+        this.powered = {}; // Reset the power status
+
+        // Create a set of all components that are part of any cycle
+        const componentsInCycles = new Set<string>();
+        for (const cycle of cycles) {
+            for (const component of cycle) {
+                componentsInCycles.add(component);
+            }
+        }
+
+        // Update the powered status for each component
+        for (const component of this.components) {
+             this.powered[component] = componentsInCycles.has(component);
+        }
+
+        // Optional: Log the power status
+        // print("Powered status: " + JSON.stringify(this.powered));
     }
 } 
