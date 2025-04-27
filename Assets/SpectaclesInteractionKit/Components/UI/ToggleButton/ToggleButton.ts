@@ -1,6 +1,7 @@
 import {createCallback} from "../../../Utils/InspectorCallbacks"
 import ReplayEvent from "../../../Utils/ReplayEvent"
 import {Interactable} from "../../Interaction/Interactable/Interactable"
+import { CircuitGraphManager } from "../../Managers/CircuitGraphManager"
 
 /**
  * This class provides basic toggle functionality for a prefab toggle button. It manages the toggle state and provides methods to handle toggle events and update the button's visual state.
@@ -39,6 +40,8 @@ export class ToggleButton extends BaseScriptComponent {
   private onStateChangedFunctionNames: string[] = []
   @ui.group_end
   private interactable: Interactable | null = null
+  
+  
 
   private onStateChangedEvent = new ReplayEvent<boolean>()
   public readonly onStateChanged = this.onStateChangedEvent.publicApi()
@@ -141,7 +144,11 @@ export class ToggleButton extends BaseScriptComponent {
   }
 
   private toggleState() {
+    print(this.getSceneObject().getParent().name)
     this._isToggledOn = !this._isToggledOn
+    if (CircuitGraphManager.instance) {
+      CircuitGraphManager.instance.update(this.getSceneObject().getParent().name, this._isToggledOn);
+    }
     this.refreshVisual()
     this.onStateChangedEvent.invoke(this._isToggledOn)
   }

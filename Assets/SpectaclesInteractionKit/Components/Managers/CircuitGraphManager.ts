@@ -3,6 +3,7 @@
 // Attach this script to a dedicated SceneObject (e.g., "GraphManager").
 
 import { validate } from "../../Utils/validate"
+import { Component } from "../Core/Component"; // Import Component
 
 // --- Placeholder imports & Declarations ---
 // Assuming BaseScriptComponent, SceneObject, Transform, vec3, component etc. are defined elsewhere
@@ -13,10 +14,31 @@ interface ScriptComponent {
     getSceneObject(): SceneObject;
     enabled: boolean; // Placeholder for script enable/disable
 }
+
+// --- Placeholder interfaces for SceneObject and ToggleButton ---
+interface ToggleButtonScript {
+    isToggledOn(): boolean;
+}
+
 // Placeholder for SceneObject, BaseScriptComponent, component
-declare var SceneObject: any;
+// Define basic interfaces for types used
+interface SceneObject {
+    name: string; // Basic SceneObject interface
+    findChildByName(name: string): SceneObject | null; // Placeholder
+    getComponent(typeName: string): any; // Placeholder, returning 'any' for flexibility
+    getChildrenCount(): number; // Added placeholder
+    getChild(index: number): SceneObject | null; // Added placeholder
+}
+declare var SceneObject: any; // Keep existing declaration if needed alongside interface
 declare var BaseScriptComponent: any;
+interface BaseScriptComponent { getSceneObject(): SceneObject; } // Add minimum interface
 declare function component(target: any): any;
+
+// Define Component interface for type usage if import is problematic
+// interface Component extends BaseScriptComponent {
+//     type: string;
+// }
+
 
 @component
 export class CircuitGraphManager extends BaseScriptComponent {
@@ -24,7 +46,7 @@ export class CircuitGraphManager extends BaseScriptComponent {
 
     public static instance: CircuitGraphManager | null = null;
 
-    public components: string[] = [];
+    public components: string[] = []; // List of component names (still useful for iteration)
 
     public connections: [string, string][] = [];
 
@@ -32,6 +54,11 @@ export class CircuitGraphManager extends BaseScriptComponent {
 
     /** Map storing the power status (true/false) for each component name. */
     public powered: { [key: string]: boolean } = {};
+
+    public switchStatus: { [key: string]: boolean } = {};
+
+    /** Map storing references to the actual Component script instances, keyed by SceneObject name. */
+    private componentInstances: Map<string, Component> = new Map();
 
 
     // --- Initialization ---
@@ -43,6 +70,52 @@ export class CircuitGraphManager extends BaseScriptComponent {
         CircuitGraphManager.instance = this;
     }
 
+    /**
+     * Registers a Component instance with the manager.
+     * @param component The Component script instance to register.
+     */
+    public registerComponent(component: Component): void {
+        // Defensive check/initialization for componentInstances
+        if (!this.componentInstances) {
+             // print("CircuitGraphManager: WARNING - componentInstances was undefined in registerComponent! Initializing.");
+            this.componentInstances = new Map();
+        }
+
+        // Ensure component and getSceneObject method exist before proceeding
+        if (!component || typeof component.getSceneObject !== 'function') {
+             // print("CircuitGraphManager: ERROR - Invalid component object passed to registerComponent.");
+            return;
+        }
+        const sceneObject = component.getSceneObject();
+        if (!sceneObject || !sceneObject.name) {
+             // print("CircuitGraphManager: WARNING - Component on object without name cannot be registered.");
+             return;
+        }
+        const name = sceneObject.name;
+        if (!this.componentInstances.has(name)) {
+            this.componentInstances.set(name, component);
+            this.addComponent(name); // Keep adding the name to the 'components' list
+            // print(`CircuitGraphManager: Registered component '${name}'`);
+        }
+    }
+
+    /**
+     * Unregisters a Component instance from the manager.
+     * @param componentName The name of the component (SceneObject name) to unregister.
+     */
+    public unregisterComponent(componentName: string): void {
+         if (this.componentInstances.has(componentName)) {
+             this.componentInstances.delete(componentName);
+             const index = this.components.indexOf(componentName);
+             if (index > -1) {
+                 this.components.splice(index, 1);
+             }
+             this.removeConnections(componentName); // Clean up connections associated with the removed component
+             // print(`CircuitGraphManager: Unregistered component '${componentName}'`);
+         }
+     }
+
+
     public addConnection(componentA: string, componentB: string): void {
         if (!this.components) {
             this.components = [];
@@ -53,6 +126,10 @@ export class CircuitGraphManager extends BaseScriptComponent {
 
         this.addComponent(componentA);
         this.addComponent(componentB);
+
+        if (componentA === componentB) {
+            return;
+        }
 
         const connectionExists = this.connections.some(conn =>
             (conn[0] === componentA && conn[1] === componentB) ||
@@ -80,6 +157,8 @@ export class CircuitGraphManager extends BaseScriptComponent {
         this.components = [];
         this.connections = [];
         this.startConnection = null;
+        this.componentInstances.clear(); // Clear the instance map
+        this.powered = {}; // Also reset power status
         this.logCurrentGraph();
     }
 
@@ -189,9 +268,11 @@ export class CircuitGraphManager extends BaseScriptComponent {
     /** Logs the current state of the connections. */
     private logCurrentGraph(): void {
         try {
-             // print(); // Linter Fix Placeholder: Log connections JSON
+             // print("Current Connections: " + JSON.stringify(this.connections, null, 2));
+             // print("Current Components: " + JSON.stringify(this.components));
+             // print("Registered Instances: " + JSON.stringify(Array.from(this.componentInstances.keys())));
         } catch (e: any) {
-            // print(); // Linter Fix Placeholder: Log error message
+            // print("Error logging graph: " + e.message);
         }
     }
 
@@ -203,31 +284,78 @@ export class CircuitGraphManager extends BaseScriptComponent {
 
     /**
      * Updates the power status of components based on detected cycles.
-     * A component is considered powered if it's part of any cycle.
+     * A component is considered powered if it's part of any cycle *that contains a battery*.
      * @param cycles The list of cycles found in the graph (output of findCycles).
      */
     public updatePower(cycles: string[][]): void {
-        this.powered = {}; // Reset the power status
+        // Use a temporary map/set to track power status based on battery-containing cycles
+        const componentsInPoweredCycles = new Set<string>();
 
-        // Create a set of all components that are part of any cycle
-        const componentsInCycles = new Set<string>();
         for (const cycle of cycles) {
-            for (const component of cycle) {
-                componentsInCycles.add(component);
+            let hasBattery = false;
+            let cycleBrokenBySwitch = false; // Flag to track if a switch broke the cycle
+
+            // First pass: Check for batteries and off switches in the cycle
+            for (const componentName of cycle) {
+                const componentInstance = this.componentInstances.get(componentName);
+                if (!componentInstance) continue; // Skip if instance not found
+
+                // Check for Battery
+                if (componentInstance.type === "Battery") {
+                    hasBattery = true;
+                    // Don't break here, need to check all components for switches
+                }
+
+                // Check for Switch
+                if (componentInstance.type === "Switch") {
+                    // print("CircuitGraphManager: Switch found!"); // Commented out due to linter error
+                    const sceneObject = componentInstance.getSceneObject();
+                    cycleBrokenBySwitch = !this.switchStatus[sceneObject.name];
+                }
+            } // End of first pass through cycle components
+
+            // If the cycle has a battery AND was not broken by an off switch, power its components
+            if (hasBattery && !cycleBrokenBySwitch) {
+                for (const componentName of cycle) {
+                    // Check if component instance still exists before adding (belt-and-suspenders)
+                    if (this.componentInstances.has(componentName)) {
+                        componentsInPoweredCycles.add(componentName);
+                    }
+                }
+            }
+        } // End of iterating through all cycles
+
+        // Update the main powered status map based on the findings
+        const newPoweredStatus: { [key: string]: boolean } = {};
+        if (this.components) { // Check if components list exists
+            for (const componentName of this.components) {
+                 // A component is powered if it's registered and part of a valid, battery-powered cycle
+                newPoweredStatus[componentName] = componentsInPoweredCycles.has(componentName);
             }
         }
-        
-        if (!this.components) {
-            return;
-        }
+        this.powered = newPoweredStatus; // Assign the newly calculated status
 
-        // Update the powered status for each component
-        for (const component of this.components) {
-             this.powered[component] = componentsInCycles.has(component);
-        }
 
         // Log the power status with component states
-        print("Circuit Power Status - Components: " + JSON.stringify(this.powered, null, 2));
+        // print("Circuit Power Status (Battery & Switch Filtered) - Components: " + JSON.stringify(this.powered, null, 2));
+    }
+
+    /**
+     * Manually triggers a recalculation of cycles and updates the power status for all components.
+     */
+    public update(componentName: string, isToggledOn: boolean): void {
+        // print("CircuitGraphManager: Manual update requested."); // Commented out due to linter error
+
+        // Defensive check: Ensure switchStatus is initialized
+        if (!this.switchStatus) {
+             // print("CircuitGraphManager: WARNING - switchStatus was undefined in update! Re-initializing.");
+            this.switchStatus = {};
+        }
+
+        this.switchStatus[componentName] = isToggledOn;
+        if (this.connections) {
+        this.updatePower(this.findCycles());
+        }
     }
 
     public removeConnections(componentA: string): void {
@@ -244,11 +372,10 @@ export class CircuitGraphManager extends BaseScriptComponent {
 
         if (this.connections.length < initialLength) {
              // Log updated graph after successful removal
-            this.logCurrentGraph(); 
-             // Note: Power/Light updates are intentionally removed as per request.
+            this.logCurrentGraph();
+             // Recalculate power after removing connections
+            this.updatePower(this.findCycles()); // Recalculate power
         }
-        const cycles = this.findCycles();
-        this.updatePower(cycles);
     }
 
     public removeConnection(componentA: string, componentB: string): void {
@@ -269,7 +396,7 @@ export class CircuitGraphManager extends BaseScriptComponent {
              // print(); // Linter Fix Placeholder: Log "Connection removed"
              // Update graph log, power state, and lights after successful removal
             this.logCurrentGraph();
-            this.updatePower(this.findCycles());
+            this.updatePower(this.findCycles()); // Recalculate power
         } else {
             // print(); // Linter Fix Placeholder: Log "Connection not found for removal"
         }
