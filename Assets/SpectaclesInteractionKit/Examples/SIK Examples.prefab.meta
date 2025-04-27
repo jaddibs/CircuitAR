@@ -2578,6 +2578,8 @@
   Enabled: true
   ScriptAsset: !<reference> a54c5722-d3fb-4aa5-97ff-f7425978bc59
   ScriptInputsDefault:
+    NewObjectRef: true
+    ObjectSpawnPoint: true
     editEventCallbacks: true
     customFunctionForOnButtonPinched: true
     onButtonPinchedFunctionNames: true
@@ -2585,6 +2587,8 @@
     {}
   ScriptInputs:
     "":
+      NewObjectRef: !<reference.ObjectPrefab> 00000000-0000-0000-0000-000000000000
+      ObjectSpawnPoint: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
       editEventCallbacks: false
       customFunctionForOnButtonPinched: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
       onButtonPinchedFunctionNames: !<string[]>
@@ -4174,6 +4178,8 @@
   Enabled: true
   ScriptAsset: !<reference> a54c5722-d3fb-4aa5-97ff-f7425978bc59
   ScriptInputsDefault:
+    NewObjectRef: true
+    ObjectSpawnPoint: true
     editEventCallbacks: true
     customFunctionForOnButtonPinched: true
     onButtonPinchedFunctionNames: true
@@ -4181,6 +4187,8 @@
     {}
   ScriptInputs:
     "":
+      NewObjectRef: !<reference.ObjectPrefab> 00000000-0000-0000-0000-000000000000
+      ObjectSpawnPoint: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
       editEventCallbacks: false
       customFunctionForOnButtonPinched: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
       onButtonPinchedFunctionNames: !<string[]>
@@ -6273,6 +6281,8 @@
   Enabled: true
   ScriptAsset: !<reference> a54c5722-d3fb-4aa5-97ff-f7425978bc59
   ScriptInputsDefault:
+    NewObjectRef: true
+    ObjectSpawnPoint: true
     editEventCallbacks: true
     customFunctionForOnButtonPinched: true
     onButtonPinchedFunctionNames: true
@@ -6280,6 +6290,8 @@
     {}
   ScriptInputs:
     "":
+      NewObjectRef: !<reference.ObjectPrefab> 00000000-0000-0000-0000-000000000000
+      ObjectSpawnPoint: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
       editEventCallbacks: false
       customFunctionForOnButtonPinched: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
       onButtonPinchedFunctionNames: !<string[]>
@@ -6725,6 +6737,8 @@
   Enabled: true
   ScriptAsset: !<reference> a54c5722-d3fb-4aa5-97ff-f7425978bc59
   ScriptInputsDefault:
+    NewObjectRef: true
+    ObjectSpawnPoint: true
     editEventCallbacks: true
     customFunctionForOnButtonPinched: true
     onButtonPinchedFunctionNames: true
@@ -6732,6 +6746,8 @@
     {}
   ScriptInputs:
     "":
+      NewObjectRef: !<reference.ObjectPrefab> 00000000-0000-0000-0000-000000000000
+      ObjectSpawnPoint: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
       editEventCallbacks: false
       customFunctionForOnButtonPinched: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
       onButtonPinchedFunctionNames: !<string[]>
@@ -6855,6 +6871,8 @@
   Enabled: true
   ScriptAsset: !<reference> a54c5722-d3fb-4aa5-97ff-f7425978bc59
   ScriptInputsDefault:
+    NewObjectRef: true
+    ObjectSpawnPoint: true
     editEventCallbacks: true
     customFunctionForOnButtonPinched: true
     onButtonPinchedFunctionNames: true
@@ -6862,6 +6880,8 @@
     {}
   ScriptInputs:
     "":
+      NewObjectRef: !<reference.ObjectPrefab> 00000000-0000-0000-0000-000000000000
+      ObjectSpawnPoint: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
       editEventCallbacks: false
       customFunctionForOnButtonPinched: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
       onButtonPinchedFunctionNames: !<string[]>
@@ -9107,6 +9127,8 @@
   Enabled: true
   ScriptAsset: !<reference> a54c5722-d3fb-4aa5-97ff-f7425978bc59
   ScriptInputsDefault:
+    NewObjectRef: true
+    ObjectSpawnPoint: true
     editEventCallbacks: true
     customFunctionForOnButtonPinched: true
     onButtonPinchedFunctionNames: true
@@ -9114,6 +9136,8 @@
     {}
   ScriptInputs:
     "":
+      NewObjectRef: !<reference.ObjectPrefab> 00000000-0000-0000-0000-000000000000
+      ObjectSpawnPoint: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
       editEventCallbacks: false
       customFunctionForOnButtonPinched: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
       onButtonPinchedFunctionNames: !<string[]>
@@ -9750,6 +9774,8 @@
   Enabled: true
   ScriptAsset: !<reference> a54c5722-d3fb-4aa5-97ff-f7425978bc59
   ScriptInputsDefault:
+    NewObjectRef: true
+    ObjectSpawnPoint: true
     editEventCallbacks: true
     customFunctionForOnButtonPinched: true
     onButtonPinchedFunctionNames: true
@@ -9757,6 +9783,8 @@
     {}
   ScriptInputs:
     "":
+      NewObjectRef: !<reference.ObjectPrefab> 00000000-0000-0000-0000-000000000000
+      ObjectSpawnPoint: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
       editEventCallbacks: false
       customFunctionForOnButtonPinched: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
       onButtonPinchedFunctionNames: !<string[]>

@@ -26,6 +26,8 @@
   CurrentVisibility: Editable
   MaxVisibility: Editable
   ScriptInputsHidden:
+    NewObjectRef: false
+    ObjectSpawnPoint: false
     customFunctionForOnButtonPinched: false
     editEventCallbacks: false
     onButtonPinchedFunctionNames: false
@@ -36,10 +38,14 @@
       customFunctionForOnButtonPinched: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
       onButtonPinchedFunctionNames: !<string[]>
         []
+      NewObjectRef: !<reference.ObjectPrefab> 00000000-0000-0000-0000-000000000000
+      ObjectSpawnPoint: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
   ScriptTypes:
     -
       {}
   InputLines:
+    - '// @input Asset.ObjectPrefab NewObjectRef {"hint":"What this button will spawn"}'
+    - '// @input SceneObject ObjectSpawnPoint {"hint":"Where it will spawn"}'
     - "// @input bool editEventCallbacks {\"hint\":\"Enable this to add functions from another script to this component's callback events\"}"
     - '// @ui {"widget":"group_start", "label":"On Button Pinched Callbacks", "showIf":"editEventCallbacks"}'
     - '// @input Component.ScriptComponent customFunctionForOnButtonPinched {"hint":"The script containing functions to be called when button is pinched"}'
