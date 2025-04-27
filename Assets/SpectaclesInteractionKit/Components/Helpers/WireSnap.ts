@@ -4,6 +4,7 @@
 import { validate } from "../../Utils/validate"
 import { Interactable } from "../Interaction/Interactable/Interactable"
 import Event, { unsubscribe } from "../../Utils/Event" // Assuming Event utility exists
+import { CircuitGraphManager } from "../Managers/CircuitGraphManager"
 
 // --- Placeholder imports for expected framework types ---
 // import { BaseScriptComponent, component, input } from "SOME_FRAMEWORK_API"
@@ -96,7 +97,7 @@ export class WireSnapBehavior extends BaseScriptComponent {
         }
 
         // --- Setup Callbacks ---
-        this.setupInteractableCallbacks()
+        this.setupInteractionCallbacks()
         this.setupColliderCallbacks()
 
         print(`WireSnapBehavior Initialized for: ${wireObject.name}`)
@@ -112,7 +113,7 @@ export class WireSnapBehavior extends BaseScriptComponent {
 
     // --- Callback Setups ---
 
-    private setupInteractableCallbacks() {
+    private setupInteractionCallbacks() {
         // Wire interactable (if it exists)
         if (this.wireInteractable) {
             this.unSubscribeList.push(
@@ -245,11 +246,27 @@ export class WireSnapBehavior extends BaseScriptComponent {
             if (targetTransform && this.firstSphereTransform) {
                 const targetPosition = targetTransform.getWorldPosition();
                 
+                // Get parent names for logging and potential graph update
+                const wireParent = wireObject.getParent();
+                const targetParent = targetToSnapTo.getParent();
+
+                const wireParentName = wireParent?.name;
+                const targetParentName = targetParent?.name;
+
                 // Snap the first sphere
                 this.firstSphereTransform.setWorldPosition(targetPosition);
                 snapPerformed = true;
                 
-                print(`LOG: [${wireObject.name}] WireSnapBehavior: Snapped first sphere to [${targetToSnapTo.name}] at ${targetPosition.toString()}.`);
+                print(`LOG: [${wireObject.name}] Snapped sphere 1 to [${targetToSnapTo.name}]`);
+
+                // Add connection to global graph using static instance
+                if (wireParentName && targetParentName) {
+                    if (CircuitGraphManager.instance) {
+                        CircuitGraphManager.instance.addConnection(wireParentName, targetParentName);
+                    } else {
+                        print(`WARN: [${wireObject.name}] CircuitGraphManager.instance not found! Cannot log connection for sphere 1.`);
+                    }
+                }
             }
         }
         
@@ -265,11 +282,27 @@ export class WireSnapBehavior extends BaseScriptComponent {
             if (targetTransform && this.secondSphereTransform) {
                 const targetPosition = targetTransform.getWorldPosition();
                 
+                // Get parent names for logging and potential graph update
+                const wireParent = wireObject.getParent();
+                const targetParent = targetToSnapTo.getParent();
+
+                const wireParentName = wireParent?.name;
+                const targetParentName = targetParent?.name;
+
                 // Snap the second sphere
                 this.secondSphereTransform.setWorldPosition(targetPosition);
                 snapPerformed = true;
                 
-                print(`LOG: [${wireObject.name}] WireSnapBehavior: Snapped second sphere to [${targetToSnapTo.name}] at ${targetPosition.toString()}.`);
+                print(`LOG: Connected element ${wireParent?.name} to element ${targetParent?.name || 'None'}`);
+
+                // Add connection to global graph using static instance
+                if (wireParentName && targetParentName) {
+                    if (CircuitGraphManager.instance) {
+                        CircuitGraphManager.instance.addConnection(wireParentName, targetParentName);
+                    } else {
+                         print(`WARN: [${wireObject.name}] CircuitGraphManager.instance not found! Cannot log connection for sphere 2.`);
+                    }
+                }
             }
         }
         

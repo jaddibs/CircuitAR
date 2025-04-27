@@ -26,18 +26,30 @@
   CurrentVisibility: Editable
   MaxVisibility: Editable
   ScriptInputsHidden:
-    dragEndTrigger: false
-    dragStartTrigger: false
+    _hoverAudioTrack: false
+    _playAudioOnHover: false
+    _playAudioOnTriggerEnd: false
+    _playAudioOnTriggerStart: false
+    _triggerEndAudioTrack: false
+    _triggerStartAudioTrack: false
   ScriptTypesHidden:
     {}
   DefaultScriptInputs:
-    - dragStartTrigger: DRAG_START_TRIGGER
-      dragEndTrigger: DRAG_END_TRIGGER
+    - _playAudioOnHover: true
+      _hoverAudioTrack: !<reference.AudioTrackAsset> 00000000-0000-0000-0000-000000000000
+      _playAudioOnTriggerStart: true
+      _triggerStartAudioTrack: !<reference.AudioTrackAsset> 00000000-0000-0000-0000-000000000000
+      _playAudioOnTriggerEnd: true
+      _triggerEndAudioTrack: !<reference.AudioTrackAsset> 00000000-0000-0000-0000-000000000000
   ScriptTypes:
     -
       {}
   InputLines:
-    - '// @input string dragStartTrigger = "DRAG_START_TRIGGER" {"hint":"Name of the custom trigger to send when interaction starts (e.g., DRAG_START_TRIGGER)"}'
-    - '// @input string dragEndTrigger = "DRAG_END_TRIGGER" {"hint":"Name of the custom trigger to send when interaction ends or is cancelled (e.g., DRAG_END_TRIGGER)"}'
+    - // @input bool _playAudioOnHover = true
+    - '// @input Asset.AudioTrackAsset _hoverAudioTrack {"hint":"This sound will play when the Interactable is hovered", "showIf":"_playAudioOnHover", "showIfValue":true}'
+    - // @input bool _playAudioOnTriggerStart = true
+    - '// @input Asset.AudioTrackAsset _triggerStartAudioTrack {"hint":"This sound will play when starting the trigger the Interactable", "showIf":"_playAudioOnTriggerStart", "showIfValue":true}'
+    - // @input bool _playAudioOnTriggerEnd = true
+    - '// @input Asset.AudioTrackAsset _triggerEndAudioTrack {"hint":"This sound will play when ending the trigger of the Interactable", "showIf":"_playAudioOnTriggerEnd", "showIfValue":true}'
   SvgIcon: ""
   DeclarationFile: !<reference> 00000000-0000-0000-0000-000000000000
