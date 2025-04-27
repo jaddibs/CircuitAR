@@ -314,6 +314,10 @@ export class WireSnapBehavior extends BaseScriptComponent {
             }
         }
 
+        if (CircuitGraphManager.instance) {
+            CircuitGraphManager.instance.removeConnections(wireParentName);
+        }
+
         // --- Apply parent movement and log connections if a snap occurred ---
         if (snapPerformed && delta) { // Check delta is not null
             const newParentPos = WireSnapBehavior.addVectors(parentCurrentPos, delta);

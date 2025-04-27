@@ -92,6 +92,9 @@ export class CircuitGraphManager extends BaseScriptComponent {
         const visited: Set<string> = new Set();
         const recursionStack: Set<string> = new Set();
         const parentMap: Map<string, string | null> = new Map(); // To reconstruct cycles
+        if (!this.components) {
+            return cycles;
+        }
 
         for (const component of this.components) {
             if (!visited.has(component)) {
@@ -213,6 +216,10 @@ export class CircuitGraphManager extends BaseScriptComponent {
                 componentsInCycles.add(component);
             }
         }
+        
+        if (!this.components) {
+            return;
+        }
 
         // Update the powered status for each component
         for (const component of this.components) {
@@ -221,5 +228,26 @@ export class CircuitGraphManager extends BaseScriptComponent {
 
         // Log the power status with component states
         print("Circuit Power Status - Components: " + JSON.stringify(this.powered, null, 2));
+    }
+
+    public removeConnections(componentA: string): void {
+        if (!this.connections) {
+            this.connections = [];
+            return; // No connections to remove
+        }
+
+        const initialLength = this.connections.length;
+        this.connections = this.connections.filter(conn => {
+            const isMatch = (conn[0] === componentA || conn[1] === componentA);
+            return !isMatch;
+        });
+
+        if (this.connections.length < initialLength) {
+             // Log updated graph after successful removal
+            this.logCurrentGraph(); 
+             // Note: Power/Light updates are intentionally removed as per request.
+        }
+        const cycles = this.findCycles();
+        this.updatePower(cycles);
     }
 } 
