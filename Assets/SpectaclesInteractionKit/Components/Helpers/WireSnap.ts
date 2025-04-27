@@ -311,6 +311,10 @@ export class WireSnapBehavior extends BaseScriptComponent {
             this.repositionWire(); // Update wire visuals based on new parent position
         }
 
+        if (CircuitGraphManager.instance) {
+            CircuitGraphManager.instance.removeConnections(wireObject.getParent()?.name);
+        }
+
         // --- Log ALL valid connections found --- 
         if (CircuitGraphManager.instance && wireObject.getParent()?.name) {
             const loggedTargetParents = new Set<string>(); // Prevent duplicate logs for same target parent

@@ -227,7 +227,7 @@ export class CircuitGraphManager extends BaseScriptComponent {
         }
 
         // Log the power status with component states
-        // print("Circuit Power Status - Components: " + JSON.stringify(this.powered, null, 2));
+        print("Circuit Power Status - Components: " + JSON.stringify(this.powered, null, 2));
     }
 
     public removeConnections(componentA: string): void {
@@ -270,7 +270,6 @@ export class CircuitGraphManager extends BaseScriptComponent {
              // Update graph log, power state, and lights after successful removal
             this.logCurrentGraph();
             this.updatePower(this.findCycles());
-            this.toggleLightsBasedOnPower();
         } else {
             // print(); // Linter Fix Placeholder: Log "Connection not found for removal"
         }
