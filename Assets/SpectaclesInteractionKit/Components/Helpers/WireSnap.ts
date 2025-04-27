@@ -367,6 +367,20 @@ export class WireSnapBehavior extends BaseScriptComponent {
             return;
         }
 
+        // Check if the overlapping object is a connection point sphere
+        // Only add if it has a name containing "Connector" or "Connection" or is a sphere
+        const isConnectionPoint = 
+            otherObject.name.toLowerCase().includes("connector") || 
+            otherObject.name.toLowerCase().includes("connection") || 
+            otherObject.name.toLowerCase().includes("sphere");
+            
+        if (!isConnectionPoint) {
+            if (this.enableDebugPrints) {
+                print(`DEBUG [${wireObject.name}] WireSnapBehavior: Ignoring overlap with non-connection point [${otherObject.name}]`)
+            }
+            return;
+        }
+
         // Ensure the other object isn't already being tracked
         if (overlappingTargets.indexOf(otherObject) === -1) {
             if (this.enableDebugPrints) {
