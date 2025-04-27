@@ -6,9 +6,6 @@ import {Interactable} from "../../Interaction/Interactable/Interactable"
 
 const TAG = "PinchButton"
 
-/**
- * This class provides basic pinch button functionality for the prefab pinch button. It is meant to be added to a Scene Object with an Interactable component, with visual behavior configured in the Lens Studio scene.
- */
 @component
 export class PinchButton extends BaseScriptComponent {
   @input() @hint ("What this button will spawn") NewObjectRef: ObjectPrefab
@@ -39,6 +36,11 @@ export class PinchButton extends BaseScriptComponent {
   // Native Logging
   private log = new NativeLogger(TAG)
 
+  // Generate a unique identifier for objects
+  private generateUniqueId(): string {
+    return `${this.NewObjectRef.name}_${Date.now()}_${Math.floor(Math.random() * 10000)}`;
+  }
+
   onAwake(): void {
     this.interactable = this.getSceneObject().getComponent(
       Interactable.getTypeName(),
@@ -52,8 +54,18 @@ export class PinchButton extends BaseScriptComponent {
       }
       this.interactable.onTriggerEnd.add((interactorEvent: InteractorEvent) => {
         if (this.enabled) {
-          print("hi")
-          this.NewObjectRef.instantiate(this.ObjectSpawnPoint);
+          // Create the new object
+          const newObject = this.NewObjectRef.instantiate(this.ObjectSpawnPoint);
+          
+          // Generate a unique name and assign it
+          const uniqueName = this.generateUniqueId();
+          newObject.name = uniqueName;
+          
+          // Log the new name to confirm it worked
+          print("Created object with unique name: " + newObject.name);
+
+          
+          
           this.onButtonPinchedEvent.invoke(interactorEvent)
         }
       })

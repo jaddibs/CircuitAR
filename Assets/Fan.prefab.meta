@@ -437,10 +437,13 @@
   ScriptInputsDefault:
     tweenName: true
     playAutomatically: true
+    type: true
+    movementType: true
     start: true
     end: true
     from: true
     to: true
+    offset: true
     delay: true
     isLocal: true
   ScriptTypesDefault:
@@ -451,13 +454,13 @@
       tweenName: ""
       playAutomatically: true
       loopType: 1
-      type: 2
-      movementType: 3
+      type: 0
+      movementType: 0
       start: !<Vec3> {x: 0.000000, y: 0.000000, z: 0.000000}
       end: !<Vec3> {x: 0.000000, y: 0.000000, z: 0.000000}
       from: !<Vec3> {x: 0.000000, y: 0.000000, z: 0.000000}
       to: !<Vec3> {x: 0.000000, y: 0.000000, z: 0.000000}
-      offset: !<Vec3> {x: 0.000000, y: 90.000000, z: 0.000000}
+      offset: !<Vec3> {x: 0.000000, y: 0.000000, z: 0.000000}
       additive: true
       time: 0.250000
       delay: !<float> 0.000000

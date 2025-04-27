@@ -44,7 +44,6 @@ export class LightToggler extends BaseScriptComponent {
         this.scriptComponent = this.getSceneObject().getComponent("Component.ScriptComponent");
         
         // Get the name of the current object to use as component name
-        this.componentName = this.getSceneObject().name;
         // print("LightToggler: Using object name as component name: " + this.componentName); // Use actual logging
         
         // Validate light objects
@@ -111,6 +110,7 @@ export class LightToggler extends BaseScriptComponent {
      * Called every frame by the update event
      */
     private onUpdate(): void {
+        this.componentName = this.getSceneObject().name;
         // Call update light state at regular intervals
         this.updateLightState();
     }
