@@ -11,6 +11,8 @@ const TAG = "PinchButton"
  */
 @component
 export class PinchButton extends BaseScriptComponent {
+  @input() @hint ("What this button will spawn") NewObjectRef: ObjectPrefab
+  @input() @hint ("Where it will spawn") ObjectSpawnPoint: SceneObject
   @input
   @hint(
     "Enable this to add functions from another script to this component's callback events",
@@ -50,6 +52,8 @@ export class PinchButton extends BaseScriptComponent {
       }
       this.interactable.onTriggerEnd.add((interactorEvent: InteractorEvent) => {
         if (this.enabled) {
+          print("hi")
+          this.NewObjectRef.instantiate(this.ObjectSpawnPoint);
           this.onButtonPinchedEvent.invoke(interactorEvent)
         }
       })
