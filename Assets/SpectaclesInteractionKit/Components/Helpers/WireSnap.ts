@@ -100,7 +100,7 @@ export class WireSnapBehavior extends BaseScriptComponent {
         this.setupInteractionCallbacks()
         this.setupColliderCallbacks()
 
-        print(`WireSnapBehavior Initialized for: ${wireObject.name}`)
+        // print(`WireSnapBehavior Initialized for: ${wireObject.name}`)
     }
 
     destroy(): void {
@@ -232,88 +232,119 @@ export class WireSnapBehavior extends BaseScriptComponent {
 
     private checkAndSnapSpheres() {
         const wireObject = this.getSceneObject();
+        if (!wireObject) {
+            print("WireSnapBehavior Error: Cannot get SceneObject.");
+            return;
+        }
+
         let snapPerformed = false;
-        
-        // First, try to snap the first sphere if it has overlaps
-        if (this.firstSphereOverlappingTargets.length > 0) {
-            const targetToSnapTo = this.firstSphereOverlappingTargets[0];
-            
+        let logSphere1Connection = false;
+        let logSphere2Connection = false;
+        let sphere1TargetName: string | undefined = undefined;
+        let sphere2TargetName: string | undefined = undefined;
+
+        // Find potential targets
+        const target1Object = this.firstSphereOverlappingTargets.length > 0 ? this.firstSphereOverlappingTargets[0] : null;
+        const target2Object = this.secondSphereOverlappingTargets.length > 0 ? this.secondSphereOverlappingTargets[0] : null;
+
+        const target1Transform = target1Object ? target1Object.getTransform() : null;
+        const target2Transform = target2Object ? target2Object.getTransform() : null;
+
+        const wireParent = wireObject.getParent();
+        const wireParentTransform = wireParent?.getTransform();
+        const wireParentName = wireParent?.name;
+
+        // Need wire parent to move the rig
+        if (!wireParent || !wireParentTransform) {
             if (this.enableDebugPrints) {
-                print(`DEBUG [${wireObject.name}] WireSnapBehavior: First sphere overlapping ${this.firstSphereOverlappingTargets.length} target(s). Attempting snap to [${targetToSnapTo?.name}].`);
+                print(`WARN: [${wireObject.name}] Wire parent or parent transform not found. Cannot move parent for snapping.`);
             }
-            
-            const targetTransform = targetToSnapTo ? targetToSnapTo.getTransform() : null;
-            if (targetTransform && this.firstSphereTransform) {
-                const targetPosition = targetTransform.getWorldPosition();
-                
-                // Get parent names for logging and potential graph update
-                const wireParent = wireObject.getParent();
-                const targetParent = targetToSnapTo.getParent();
+             // Clear overlaps even if we can't snap by moving parent
+            this.firstSphereOverlappingTargets = [];
+            this.secondSphereOverlappingTargets = [];
+            return;
+        }
 
-                const wireParentName = wireParent?.name;
-                const targetParentName = targetParent?.name;
+        const parentCurrentPos = wireParentTransform.getWorldPosition();
+        let delta: vec3 | null = null; // Initialize delta as vec3 or null
 
-                // Snap the first sphere
-                this.firstSphereTransform.setWorldPosition(targetPosition);
-                snapPerformed = true;
-                
-                print(`LOG: [${wireObject.name}] Snapped sphere 1 to [${targetToSnapTo.name}]`);
+        // --- Determine which sphere dictates the snap movement (Priority: Sphere 1) ---
 
-                // Add connection to global graph using static instance
-                if (wireParentName && targetParentName) {
-                    if (CircuitGraphManager.instance) {
-                        CircuitGraphManager.instance.addConnection(wireParentName, targetParentName);
-                    } else {
-                        print(`WARN: [${wireObject.name}] CircuitGraphManager.instance not found! Cannot log connection for sphere 1.`);
+        // Check Sphere 1 snap possibility
+        if (target1Object && target1Transform && this.firstSphereTransform) {
+            const sphere1Pos = this.firstSphereTransform.getWorldPosition();
+            const target1Pos = target1Transform.getWorldPosition();
+            delta = WireSnapBehavior.subtractVectors(target1Pos, sphere1Pos); // Calculate delta (now returns vec3)
+            snapPerformed = true;
+            logSphere1Connection = true; // Mark sphere 1 connection for logging
+            sphere1TargetName = target1Object.getParent()?.name;
+
+            if (this.enableDebugPrints) {
+                print(`DEBUG [${wireObject.name}] Prioritizing snap based on Sphere 1 to [${target1Object.name}]. Delta: {${delta.x?.toFixed(2)}, ${delta.y?.toFixed(2)}, ${delta.z?.toFixed(2)}}`);
+            }
+
+            // Check if sphere 2 is also snapping (to same or different target)
+            if (target2Object && target2Transform && this.secondSphereTransform) {
+                 // Only log sphere 2 connection if its target is different from sphere 1's target
+                 // If targets are same, sphere 1 connection log is sufficient
+                if (target1Object !== target2Object) {
+                    logSphere2Connection = true;
+                    sphere2TargetName = target2Object.getParent()?.name;
+                    if (this.enableDebugPrints) {
+                        print(`DEBUG [${wireObject.name}] Sphere 2 also overlapping different target [${target2Object.name}]. Will log both connections.`);
+                    }
+                } else {
+                     if (this.enableDebugPrints) {
+                        print(`DEBUG [${wireObject.name}] Sphere 2 also overlapping same target [${target1Object.name}]. Only logging one connection.`);
                     }
                 }
             }
         }
-        
-        // Then, try to snap the second sphere if it has overlaps
-        if (this.secondSphereOverlappingTargets.length > 0) {
-            const targetToSnapTo = this.secondSphereOverlappingTargets[0];
-            
-            if (this.enableDebugPrints) {
-                print(`DEBUG [${wireObject.name}] WireSnapBehavior: Second sphere overlapping ${this.secondSphereOverlappingTargets.length} target(s). Attempting snap to [${targetToSnapTo?.name}].`);
+        // Else, check Sphere 2 snap possibility (only if Sphere 1 didn't snap)
+        else if (target2Object && target2Transform && this.secondSphereTransform) {
+            const sphere2Pos = this.secondSphereTransform.getWorldPosition();
+            const target2Pos = target2Transform.getWorldPosition();
+            delta = WireSnapBehavior.subtractVectors(target2Pos, sphere2Pos); // Calculate delta (now returns vec3)
+            snapPerformed = true;
+            logSphere2Connection = true; // Mark sphere 2 connection for logging
+            sphere2TargetName = target2Object.getParent()?.name;
+
+            if (this.enableDebugPrints && delta) {
+                 print(`DEBUG [${wireObject.name}] Snapping based on Sphere 2 to [${target2Object.name}]. Delta: {${delta.x?.toFixed(2)}, ${delta.y?.toFixed(2)}, ${delta.z?.toFixed(2)}}`);
             }
-            
-            const targetTransform = targetToSnapTo ? targetToSnapTo.getTransform() : null;
-            if (targetTransform && this.secondSphereTransform) {
-                const targetPosition = targetTransform.getWorldPosition();
-                
-                // Get parent names for logging and potential graph update
-                const wireParent = wireObject.getParent();
-                const targetParent = targetToSnapTo.getParent();
+        }
 
-                const wireParentName = wireParent?.name;
-                const targetParentName = targetParent?.name;
+        // --- Apply parent movement and log connections if a snap occurred ---
+        if (snapPerformed && delta) { // Check delta is not null
+            const newParentPos = WireSnapBehavior.addVectors(parentCurrentPos, delta);
+            wireParentTransform.setWorldPosition(newParentPos);
+             // Access x, y, z properties if they exist on your vec3 type for logging
+            // print(`LOG: [${wireObject.name}] Moved parent by delta {${delta.x?.toFixed(2)}, ${delta.y?.toFixed(2)}, ${delta.z?.toFixed(2)}} to snap.`);
 
-                // Snap the second sphere
-                this.secondSphereTransform.setWorldPosition(targetPosition);
-                snapPerformed = true;
-                
-                print(`LOG: Connected element ${wireParent?.name} to element ${targetParent?.name || 'None'}`);
-
-                // Add connection to global graph using static instance
-                if (wireParentName && targetParentName) {
-                    if (CircuitGraphManager.instance) {
-                        CircuitGraphManager.instance.addConnection(wireParentName, targetParentName);
-                    } else {
-                         print(`WARN: [${wireObject.name}] CircuitGraphManager.instance not found! Cannot log connection for sphere 2.`);
-                    }
+            // Log connections to CircuitGraphManager
+            if (CircuitGraphManager.instance) {
+                if (logSphere1Connection && wireParentName && sphere1TargetName) {
+                    CircuitGraphManager.instance.addConnection(wireParentName, sphere1TargetName);
+                     // print(`LOG: [${wireObject.name}] Logged connection to graph: ${wireParentName} <-> ${sphere1TargetName}`);
                 }
+                if (logSphere2Connection && wireParentName && sphere2TargetName) {
+                    CircuitGraphManager.instance.addConnection(wireParentName, sphere2TargetName);
+                    // print(`LOG: [${wireObject.name}] Logged connection to graph: ${wireParentName} <-> ${sphere2TargetName}`);
+                }
+            } else {
+                print(`WARN: [${wireObject.name}] CircuitGraphManager.instance not found! Cannot log connection(s).`);
+            }
+
+            this.repositionWire(); // Update wire visuals based on new sphere positions
+        } else {
+            // The "No valid overlaps" message is often redundant if debugging is off.
+            // Keep it inside the debug check if needed.
+            if (this.enableDebugPrints) {
+                 print(`DEBUG: [${wireObject.name}] No valid overlaps detected for snapping.`);
             }
         }
-        
-        // If any snapping occurred, update the wire
-        if (snapPerformed) {
-            this.repositionWire();
-        } else if (this.enableDebugPrints) {
-            print(`LOG: [${wireObject.name}] WireSnapBehavior: No overlaps detected, no snapping performed.`);
-        }
-        
-        // Clear overlap tracking after snapping
+
+        // Clear overlap tracking AFTER potentially moving the parent
         this.firstSphereOverlappingTargets = [];
         this.secondSphereOverlappingTargets = [];
     }
@@ -396,5 +427,22 @@ export class WireSnapBehavior extends BaseScriptComponent {
             // Additional wire updates would go here
             // (length adjustment, rotation to face between points, etc.)
         }
+    }
+
+    // --- Vector Helpers (Requires Framework-Specific vec3 Implementation) ---
+    private static subtractVectors(v1: vec3, v2: vec3): vec3 {
+        // Replace with framework-specific vector subtraction
+        // Example: return v1.sub(v2); 
+        // Example: return new vec3(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z);
+        // Placeholder implementation (adapt to your framework):
+        return new vec3(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z);
+    }
+
+    private static addVectors(v1: vec3, v2: vec3): vec3 {
+        // Replace with framework-specific vector addition
+        // Example: return v1.add(v2);
+        // Example: return new vec3(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
+        // Placeholder implementation (adapt to your framework):
+        return new vec3(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
     }
 }
