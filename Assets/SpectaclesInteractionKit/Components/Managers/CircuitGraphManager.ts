@@ -219,7 +219,7 @@ export class CircuitGraphManager extends BaseScriptComponent {
              this.powered[component] = componentsInCycles.has(component);
         }
 
-        // Optional: Log the power status
-        // print("Powered status: " + JSON.stringify(this.powered));
+        // Log the power status with component states
+        print("Circuit Power Status - Components: " + JSON.stringify(this.powered, null, 2));
     }
 } 
