@@ -1,4 +1,4 @@
-# SnapProject
+# CircuitAR
 
 **Build and explore circuits in augmented reality.**  
 An education tool to let your creativity be electric.
