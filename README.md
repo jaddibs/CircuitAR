@@ -3,10 +3,9 @@
 **Build and explore circuits in augmented reality.**  
 An education tool to let your creativity be electric.
 
-[Demo](https://drive.google.com/file/d/1sqS_DGk3BykIH75NEpXlu1P3qFZJl-Rh/view)<br>
-[Devpost](https://devpost.com/software/circuitar)
-
-Contributors: Jad Dibs, Jonathan Lou, Brandon Pieczka, Kian Baghai
+**Links:** [Demo Video](https://drive.google.com/file/d/1sqS_DGk3BykIH75NEpXlu1P3qFZJl-Rh/view) | [Devpost Project](https://devpost.com/software/circuitar)
+ 
+**Contributors:** Jad Dibs, Jonathan Lou, Brandon Pieczka, Kian Baghai
 
 ## Tech Stack
 
